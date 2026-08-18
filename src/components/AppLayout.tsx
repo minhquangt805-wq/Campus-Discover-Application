@@ -1,0 +1,9 @@
+import { NavLink, Outlet } from 'react-router-dom'
+import { useApp } from '../context/AppContext'
+
+const links = [['/', 'Explore', '✦'], ['/search', 'Discover', '⌕'], ['/calendar', 'Calendar', '▦'], ['/reminders', 'Reminders', '♧'], ['/settings', 'Profile', '◉']]
+export function AppLayout() {
+  const { reminders } = useApp()
+  const activeReminders = reminders.filter((item) => item.enabled).length
+  return <div className="min-h-screen"><header className="border-b border-slate-100 bg-white"><div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-8"><NavLink to="/" className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-2xl bg-brand text-xl text-white">✦</span><div><p className="font-extrabold">Campus Discover</p><p className="text-xs text-slate-500">Find your next thing</p></div></NavLink><NavLink to="/reminders" className="relative grid size-10 place-items-center rounded-full bg-slate-100 text-lg">♧{activeReminders > 0 && <span className="absolute right-0 top-0 grid size-4 place-items-center rounded-full bg-rose-500 text-[9px] font-bold text-white">{activeReminders}</span>}</NavLink></div></header><main><Outlet /></main><nav className="fixed inset-x-0 bottom-0 z-20 border-t border-slate-200 bg-white/95 backdrop-blur"><div className="mx-auto flex max-w-xl justify-around px-2">{links.map(([to, label, icon]) => <NavLink key={to} to={to} end={to === '/'} className={({ isActive }) => `relative flex min-w-14 flex-col items-center gap-1 px-2 py-3 text-[11px] font-bold ${isActive ? 'text-brand' : 'text-slate-400'}`}><span className="text-lg">{icon}</span>{label}{label === 'Reminders' && activeReminders > 0 && <span className="absolute right-2 top-2 size-2 rounded-full bg-rose-500" />}</NavLink>)}</div></nav></div>
+}
